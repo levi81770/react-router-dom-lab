@@ -1,14 +1,16 @@
 import React from 'react'
 import { useParams } from 'react-router'
-import { useNavigate } from 'react-router';
 
 
-const MailboxDetails = ({ mailboxes }) => {
+const MailboxDetails = ({ mailboxes, letters }) => {
   const { mailboxId } = useParams();
-  const navigate = useNavigate();
 
   const selectedBox = mailboxes.find(
     (mailbox) => mailbox._id === Number(mailboxId)
+  );
+
+  const selectedLetters = letters.filter(
+    (letter) => Number(letter.mailboxId) === Number(mailboxId)
   );
 
   return (
@@ -26,6 +28,22 @@ const MailboxDetails = ({ mailboxes }) => {
           <p>Boxholder: {selectedBox.boxOwner}</p>
           <br />
           <p>Box Size: {selectedBox.boxSize}</p>
+          <br />
+          <h2>
+            <strong>Letters</strong>
+          </h2>
+          <br />
+          <br />
+          {selectedLetters.length ? (
+            selectedLetters.map((letter) => (
+              <div key={letter._id}>
+                <p>Recipient: {letter.recipient}</p>
+                <p>Message: {letter.message}</p>
+              </div>
+            ))
+          ) : (
+            <p>No letters in this mailbox.</p>
+          )}
         </div>
       ) : (
         <p>Mailbox not found</p>
